@@ -1,13 +1,16 @@
-# FROM node:10-alpine
+FROM node:10 AS build
+WORKDIR /node
+COPY . .
+RUN npm install
+RUN npm run build
 
-# WORKDIR /app
+FROM nginx:alpine
+COPY --from=build /node/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
 
-# COPY package.json package-lock.json /app/
 
-# RUN npm install
-# COPY . /app
 
-# CMD ["npm", "run", "serve"]
 
 
 
